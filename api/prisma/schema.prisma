@@ -17,4 +17,40 @@ model User {
   name String
   password String
   rol String @default("USER")
+  active Boolean
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+  name String
+  image String
+  brand String
+  category Int
+  price Decimal
+  active Boolean
+  sales Sale[]
+}
+
+model Pet {
+  id Int @id @default(autoincrement())
+  name String
+  sex String
+  image String
+  description String?
+  breed String?
+  age Int
+  species String
+  active Boolean
+
+}
+
+model Sale {
+  id Int @id @default(autoincrement())
+  bill Int
+  idproduct Int
+  iduser Int
+  quantity Int
+  price Int
+  total Int
+  product Product @relation(fields: [idproduct], references: [id])
 }

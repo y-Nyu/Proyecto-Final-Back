@@ -1,6 +1,7 @@
 const { PrismaClient } = require("@prisma/client")
 const bcrypt = require("bcrypt");
 const client = new PrismaClient();
+const {ADMIN_PAGES} = require("../utils/utils")
 
 
 async function authorization(req, res, next)
@@ -10,14 +11,30 @@ async function authorization(req, res, next)
         const {email, password} = req.body;
 
         const user = await client.user.findFirst({
-            email,
+            where: {
+                email,
+            }            
         });
 
-        if(!user) throw Error("No such user in the database");
 
+        // We check user is in the data base and, if in db, we check password is correct
+        if(!user) throw Error("No such user in the database");
+        
         const isCorrect = bcrypt.compareSync(password, user.password);
         
         if(!isCorrect) throw Error("Incorrect password");
+
+
+        // If everything went well, then we check privileges
+        if(ADMIN_PAGES.includes(req.path))
+        {
+            if(user.rol !== "ADMIN") 
+            {
+                return res.status(401).json({message: "Not sufficient privileges"})
+            }
+
+        }
+
 
         next();
     }
