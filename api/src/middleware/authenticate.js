@@ -7,6 +7,9 @@ function authenticate(req, res, next)
     try
     {   
 
+        // If current path does not need authentication we keep going
+        // This makes it so user doesn't need to be logged in to
+        // enter the login or register page
         if(nonSecure.includes(req.path)) 
         {
             next();

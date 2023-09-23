@@ -1,6 +1,5 @@
-const PrismaClient = require("../db");
+const prisma = require("../db");
 const bcrypt = require("bcrypt");
-const client = new PrismaClient();
 const {ADMIN_PAGES} = require("../utils/utils")
 
 
@@ -10,7 +9,7 @@ async function authorization(req, res, next)
     {
         const {email, password} = req.body;
 
-        const user = await client.user.findFirst({
+        const user = await prisma.user.findFirst({
             where: {
                 email,
             }            
