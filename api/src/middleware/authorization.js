@@ -1,4 +1,4 @@
-const { PrismaClient } = require("@prisma/client")
+const PrismaClient = require("../db");
 const bcrypt = require("bcrypt");
 const client = new PrismaClient();
 const {ADMIN_PAGES} = require("../utils/utils")
