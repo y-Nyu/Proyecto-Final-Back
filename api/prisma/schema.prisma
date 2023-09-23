@@ -17,7 +17,7 @@ model User {
   name String
   password String
   rol String @default("USER")
-  active Boolean
+  active Boolean @default(true)
 }
 
 model Product {
@@ -27,7 +27,7 @@ model Product {
   brand String
   category Int
   price Decimal
-  active Boolean
+  active Boolean @default(true)
   sales Sale[]
 }
 
@@ -40,7 +40,7 @@ model Pet {
   breed String?
   age Int
   species String
-  active Boolean
+  active Boolean @default(true)
 
 }
 
