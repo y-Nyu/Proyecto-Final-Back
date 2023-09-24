@@ -1,3 +1,6 @@
+require("dotenv").config();
+const { JWT_SECRET } = process.env;
+
 const newUser = require("../../controllers/Users/createuser");
 const deleteUser = require("../../controllers/Users/deleteUser");
 const editUser = require("../../controllers/Users/editUser");
@@ -7,12 +10,26 @@ const {
   getUsersByName,
 } = require("../../controllers/Users/getUsers");
 
+const jwt = require("jsonwebtoken");
+
+//Generar el TOKEN
+function generateToken(user) {
+  const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
+    expiresIn: "1h",
+  });
+  return token;
+}
+
 //Creacion del usuario
 const usersCreate = async (req, res) => {
   const { name, email, celular, password } = req.body;
   try {
     const user = await newUser(name, email, celular, password);
-    res.status(201).send(`Usuario creado: ${user.name}`);
+
+    // Generar un token JWT para el usuario
+    const token = generateToken(user);
+
+    res.status(201).json({ message: `Usuario creado: ${user.name}`, token });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
