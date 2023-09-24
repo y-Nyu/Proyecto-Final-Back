@@ -12,7 +12,7 @@ async function createSale(iduser, idproduct, price, quantity, bill)
         idproduct: parseInt(idproduct),
         price: product.price,
         quantity: parseInt(quantity),
-        bill: parseInt(quantity),
+        bill: parseInt(bill),
         iduser: parseInt(iduser),
         total: product.price * parseInt(quantity),
     };
