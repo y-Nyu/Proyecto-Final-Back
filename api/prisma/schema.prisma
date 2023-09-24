@@ -50,7 +50,7 @@ model Sale {
   idproduct Int
   iduser Int
   quantity Int
-  price Int
-  total Int
+  price Decimal
+  total Decimal
   product Product @relation(fields: [idproduct], references: [id])
 }

@@ -13,7 +13,9 @@ async function authorization(req, res, next)
             where: {
                 email,
             }            
+        
         });
+
 
 
         // We check user is in the data base and, if in db, we check password is correct
