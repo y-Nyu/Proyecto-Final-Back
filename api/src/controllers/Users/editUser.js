@@ -1,4 +1,4 @@
-const prisma = require("../../../db");
+const prisma = require("../../db");
 
 const editUser = async (id, name, email, password, celular) => {
   const user = await prisma.user.update({

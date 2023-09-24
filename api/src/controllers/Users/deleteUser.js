@@ -1,4 +1,4 @@
-const prisma = require("../../../db");
+const prisma = require("../../db");
 
 const deleteUser = async (id) => {
   const user = await prisma.user.delete({

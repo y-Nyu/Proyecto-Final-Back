@@ -1,9 +1,11 @@
-const prisma = require("../../../db");
+const prisma = require("../../db");
 
 //Busca todos los usuarios
 const getUsers = async () => {
   const users = await prisma.user.findMany();
-  return users;
+  return users.length === 0
+    ? "La base de datos de usuarios se encuentra vacia"
+    : users;
 };
 
 // Función para buscar un usuario por su ID
@@ -16,4 +18,16 @@ const getUserById = async (id) => {
   return user;
 };
 
-module.exports = { getUsers, getUserById };
+// Función para buscar usuarios por su nombre
+const getUsersByName = async (name) => {
+  const users = await prisma.user.findMany({
+    where: {
+      name: {
+        contains: name,
+      },
+    },
+  });
+  return users;
+};
+
+module.exports = { getUsers, getUserById, getUsersByName };

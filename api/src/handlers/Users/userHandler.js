@@ -1,7 +1,11 @@
 const newUser = require("../../controllers/Users/createuser");
 const deleteUser = require("../../controllers/Users/deleteUser");
 const editUser = require("../../controllers/Users/editUser");
-const { getUsers, getUserById } = require("../../controllers/Users/getUsers");
+const {
+  getUsers,
+  getUserById,
+  getUsersByName,
+} = require("../../controllers/Users/getUsers");
 
 //Creacion del usuario
 const usersCreate = async (req, res) => {
@@ -18,7 +22,7 @@ const usersCreate = async (req, res) => {
 const userDelete = async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await deleteUser(id);
+    const user = await deleteUser(+id);
     res.status(201).send(`Usuario eliminado: ${user.name}`);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -30,8 +34,8 @@ const usersEdit = async (req, res) => {
   const { id } = req.params;
   const { name, email, celular, password } = req.body;
   try {
-    const user = await editUser(id, name, email, celular, password);
-    res.status(201).send(`Usuario editado: ${user}`);
+    const user = await editUser(+id, name, email, celular, password);
+    res.status(201).json(`Usuario editado con exito ${user.name}`);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -40,8 +44,16 @@ const usersEdit = async (req, res) => {
 //Obtener todos los usuarios
 const usersGet = async (req, res) => {
   try {
-    const users = await getUsers();
-    res.status(200).json(users);
+    const { name } = req.query;
+    if (!name) {
+      // Si no se proporciona un nombre, trae todos los usuarios
+      const users = await getUsers();
+      res.status(200).json(users);
+    } else {
+      // Si se proporciona un nombre, busca usuarios por nombre
+      const users = await getUsersByName(name);
+      res.status(200).json(users);
+    }
   } catch (error) {
     res.status(500).json({ error: "Error al obtener los usuarios" });
   }
@@ -51,7 +63,7 @@ const usersGet = async (req, res) => {
 const userGetById = async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await getUserById(id);
+    const user = await getUserById(+id);
     if (user) {
       res.status(200).json(user);
     } else {
