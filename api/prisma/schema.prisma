@@ -28,29 +28,31 @@ model Product {
   category Int
   price Decimal
   active Boolean @default(true)
-  sales Sale[]
+  categoryrel Category @relation(fields: [category], references: [id])
+  details Detail[]
 }
 
-model Pet {
+model Detail {
+  id Int @id @default(autoincrement())
+  idsale Int
+  idproduct Int
+  quantity Int
+  price Decimal
+  total Decimal
+  sale Sale @relation(fields: [idsale], references: [id])
+  product Product @relation(fields: [idproduct], references: [id])
+
+}
+
+model Category {
   id Int @id @default(autoincrement())
   name String
-  sex String
-  image String
-  description String?
-  breed String?
-  age Int
-  species String
-  active Boolean @default(true)
-
+  active Boolean
+  products Product[]
 }
 
 model Sale {
   id Int @id @default(autoincrement())
-  bill Int
-  idproduct Int
   iduser Int
-  quantity Int
-  price Decimal
-  total Decimal
-  product Product @relation(fields: [idproduct], references: [id])
+  details Detail[]
 }

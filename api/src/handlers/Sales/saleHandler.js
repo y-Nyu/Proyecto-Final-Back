@@ -5,14 +5,9 @@ const getSaleByIdController = require("../../controllers/Sales/getSaleById");
 
 const createSale = (req, res) => {
     
-    // Es mala idea obtener el precio del producto desde la req.
-    // Cualquiera puede dar un precio más barato que el real en la solicitud
-    // y sacar beneficios ilícitos
-    // ----------------------------------------------------------------------
-    // LO DEJO POR AHORA; CHARLARLO LUEGO EN EL GRUPO
-    const {iduser, idproduct, price, quantity, bill} = req.body; 
+    const {iduser, idproduct, quantity} = req.body; 
     
-    createSaleController(iduser, idproduct, price, quantity, bill)
+    createSaleController(iduser, idproduct, quantity)
         .then(sale => {
             res.status(200).json({...sale});
         })
