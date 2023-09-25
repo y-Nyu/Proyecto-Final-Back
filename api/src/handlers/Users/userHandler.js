@@ -29,7 +29,9 @@ const usersCreate = async (req, res) => {
     // Generar un token JWT para el usuario
     const token = generateToken(user);
 
-    res.status(201).json({ message: `Usuario creado: ${user.name}`, token });
+    res
+      .status(201)
+      .json({ message: `Usuario creado: ${user.name}`, token, email });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
