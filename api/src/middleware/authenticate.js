@@ -15,7 +15,6 @@ function authenticate(req, res, next)
             next();
         }
 
-
         const token = req.headers.authorization?.split(" ")[1];
         
         if(!token)
