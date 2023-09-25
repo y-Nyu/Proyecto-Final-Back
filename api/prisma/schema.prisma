@@ -16,6 +16,42 @@ model User {
   celular  String
   name     String
   password String
-  rol      String  @default("user")
+  rol      String  @default("USER")
   active   Boolean @default(true)
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  image       String
+  brand       String
+  category    Int
+  price       Decimal
+  active      Boolean  @default(true)
+  categoryrel Category @relation(fields: [category], references: [id])
+  details     Detail[]
+}
+
+model Detail {
+  id        Int     @id @default(autoincrement())
+  idsale    Int
+  idproduct Int
+  quantity  Int
+  price     Decimal
+  total     Decimal
+  sale      Sale    @relation(fields: [idsale], references: [id])
+  product   Product @relation(fields: [idproduct], references: [id])
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String
+  active   Boolean
+  products Product[]
+}
+
+model Sale {
+  id      Int      @id @default(autoincrement())
+  iduser  Int
+  details Detail[]
 }
