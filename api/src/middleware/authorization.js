@@ -11,7 +11,7 @@ async function authorization(req, res, next)
 
         // This obtains token payload
         const payload = token.split(".")[1] 
-        const email = JSON.parse(Buffer.from(payload, "base64")).email;
+        const email = JSON.parse(Buffer.from(payload, "base64").toString()).email;
 
         const user = await prisma.user.findFirst({
             where: {
