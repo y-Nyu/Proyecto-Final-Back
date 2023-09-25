@@ -11,6 +11,13 @@ const {
   getAllSales,
   getSaleById,
 } = require("../handlers/Sales/saleHandler");
+const {
+  createNewProduct,
+  deleteAProduct,
+  editAProduct,
+  getAProduct,
+  getProductId,
+} = require("../handlers/Products/ProductHandler");
 
 const router = Router();
 
@@ -31,6 +38,12 @@ router.get("/get-sales", getAllSales);
 router.get("/:id", getSaleById);
 router.post("/sale", createSale);
 
+///////////////////////////////////////// Products routes
+router.post("/product", createNewProduct);
+router.delete("/product/:id", deleteAProduct);
+router.put("/product/:id", editAProduct);
+router.get("/product", getAProduct);
+router.get("/product/:id", getProductId);
 /////////////////////////////////////////
 
 module.exports = router;
