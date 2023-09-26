@@ -8,7 +8,6 @@ async function authorization(req, res, next)
     {
         const token = req.headers.authorization?.split(" ")[1];
 
-
         // This obtains token payload
         const payload = token.split(".")[1] 
         const email = JSON.parse(Buffer.from(payload, "base64").toString()).email;
