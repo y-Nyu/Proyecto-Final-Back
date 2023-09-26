@@ -1,27 +1,46 @@
 const prisma = require("../../db");
 
-async function createSale(iduser, idproduct, price, quantity, bill)
-{
-    const product = await prisma.product.findFirst({where: {
-        id: parseInt(idproduct),
-    }})
+async function createSale(token, idproduct, quantity) {
+  const email = JSON.parse(
+    Buffer.from(token?.split(".")[1], "base64").toString()
+  );
+  let iduser = await prisma.user.findFirst({
+    where: {
+      email: email.email,
+    },
+  });
 
-    if(!product) throw Error("No such product in the database");
+  iduser = iduser.id;
 
-    const sale = {
-        idproduct: parseInt(idproduct),
-        price: product.price,
-        quantity: parseInt(quantity),
-        bill: parseInt(bill),
-        iduser: parseInt(iduser),
-        total: product.price * parseInt(quantity),
-    };
+  const product = await prisma.product.findUnique({
+    where: {
+      id: parseInt(idproduct),
+    },
+  });
 
-    const saleRes = await prisma.sale.create({
-        data: sale,
-    });
+  if (!product) throw Error("No such product in the database");
 
-    return saleRes;
+  // This creates the detail and the sale it is related to at the same time
+  // It also connects this detail with the product
+  const detail = await prisma.detail.create({
+    data: {
+      quantity: parseInt(quantity),
+      price: parseFloat(product.price),
+      total: parseFloat(product.price) * parseInt(quantity),
+      sale: {
+        create: {
+          iduser: parseInt(iduser),
+        },
+      },
+      product: {
+        connect: {
+          id: product.id,
+        },
+      },
+    },
+  });
+
+  return detail;
 }
 
 module.exports = createSale;

@@ -11,13 +11,15 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
   celular  String
   name     String
   password String
-  rol      String  @default("USER")
-  active   Boolean @default(true)
+  rol      String    @default("USER")
+  active   Boolean   @default(true)
+  products Product[]
+  sales    Sale[]
 }
 
 model Product {
@@ -30,6 +32,8 @@ model Product {
   active      Boolean  @default(true)
   categoryrel Category @relation(fields: [category], references: [id])
   details     Detail[]
+  user        User?    @relation(fields: [userId], references: [id])
+  userId      Int?
 }
 
 model Detail {
@@ -46,7 +50,7 @@ model Detail {
 model Category {
   id       Int       @id @default(autoincrement())
   name     String
-  active   Boolean
+  active   Boolean   @default(true)
   products Product[]
 }
 
@@ -54,4 +58,5 @@ model Sale {
   id      Int      @id @default(autoincrement())
   iduser  Int
   details Detail[]
+  user    User     @relation(fields: [iduser], references: [id])
 }

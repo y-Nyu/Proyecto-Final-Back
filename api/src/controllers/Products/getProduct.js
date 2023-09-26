@@ -1,5 +1,4 @@
 const prisma = require("../../db");
-
 //Busca todos los productos.
 
 const getProduct = async () => {

@@ -41,7 +41,7 @@ const editAProduct = async (req, res) => {
 
   try {
     const product = await editProduct(+id, name, image, brand, category, price);
-    res.status(201).send(`Producto creado: ${product.name}`);
+    res.status(201).send(`Producto editado: ${product.name}`);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
