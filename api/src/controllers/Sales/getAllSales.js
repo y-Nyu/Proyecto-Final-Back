@@ -7,7 +7,7 @@ async function getAllSales() {
     },
   });
 
-  if (!sales) throw Error("No sales present in the database");
+  if (sales.length === 0) throw Error("No sales present in the database");
 
   return sales;
 }

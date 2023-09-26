@@ -2,7 +2,15 @@ const prisma = require("../../db");
 
 //Busca todos los usuarios
 const getUsers = async () => {
-  const users = await prisma.user.findMany({});
+  const users = await prisma.user.findMany({
+    include: {
+      sales: {
+        include: {
+          details: true,
+        },
+      },
+    },
+  });
 
   return users.length === 0
     ? "La base de datos de usuarios se encuentra vacia"
