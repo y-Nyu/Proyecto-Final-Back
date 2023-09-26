@@ -18,6 +18,7 @@ model User {
   password String
   rol String @default("USER")
   active Boolean @default(true)
+  sales Sale[]
 }
 
 model Product {
@@ -55,4 +56,5 @@ model Sale {
   id Int @id @default(autoincrement())
   iduser Int
   details Detail[]
+  user User @relation(fields: [iduser], references: [id])
 }
