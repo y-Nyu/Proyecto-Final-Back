@@ -4,6 +4,8 @@ const { JWT_SECRET } = process.env;
 const newUser = require("../../controllers/Users/createuser");
 const deleteUser = require("../../controllers/Users/deleteUser");
 const editUser = require("../../controllers/Users/editUser");
+const loginUser = require("../../controllers/Users/loginUser");
+const loginUserGoogle = require("../../controllers/Users/loginUserGoogle");
 const {
   getUsers,
   getUserById,
@@ -35,6 +37,35 @@ const usersCreate = async (req, res) => {
   }
 };
 
+//Login del usuario (Sin terceros)
+const userLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await loginUser(email, password);
+    const token = generateToken(user);
+
+    res.status(200).json({ message: `Usuario loggeado: ${user.name}`, token });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
+};
+
+//Login del usuario(Google)
+const userGoogleLogin = async (req, res) => {
+  try {
+    const { google_token } = req.body;
+
+    // El ticket permite obtener el mail del usuario para
+    // chequear la base de datos
+    const user = await loginUserGoogle(google_token);
+    const token = generateToken(user);
+
+    res.status(200).json({ message: `Usuario loggeado: ${user.name}`, token });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
+};
 //Borrar el usuario
 const userDelete = async (req, res) => {
   const { id } = req.params;
@@ -91,4 +122,12 @@ const userGetById = async (req, res) => {
   }
 };
 
-module.exports = { usersCreate, userDelete, usersEdit, usersGet, userGetById };
+module.exports = {
+  usersCreate,
+  userDelete,
+  usersEdit,
+  usersGet,
+  userGetById,
+  userGoogleLogin,
+  userLogin,
+};

@@ -56,7 +56,6 @@ const editAProduct = async (req, res) => {
 };
 
 //Obtener todos los productos:
-
 const getAProduct = async (req, res) => {
   try {
     const { name, brand, price, category } = req.query;
