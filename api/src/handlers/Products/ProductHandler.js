@@ -10,10 +10,17 @@ const {
 //Creacion de un nuevo producto:
 
 const createNewProduct = async (req, res) => {
-  const { name, image, brand, category, price } = req.body;
+  const { name, image, brand, category, description, price } = req.body;
 
   try {
-    const product = await createProduct(name, image, brand, category, price);
+    const product = await createProduct(
+      name,
+      image,
+      brand,
+      category,
+      description,
+      price
+    );
     res.status(201).send(`Nuevo producto creado: ${product.name}`);
   } catch (error) {
     res.status(400).json({ error: error.message });
