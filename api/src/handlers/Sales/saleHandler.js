@@ -1,4 +1,5 @@
 const prisma = require("../../db");
+
 const createSaleController = require("../../controllers/Sales/createSale");
 const getAllSalesController = require("../../controllers/Sales/getAllSales");
 const getSaleByIdController = require("../../controllers/Sales/getSaleById");

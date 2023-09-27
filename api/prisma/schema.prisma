@@ -52,9 +52,8 @@ model Category {
   products Product[]
 }
 
-model Sale {
-  id      Int      @id @default(autoincrement())
-  iduser  Int
+  id Int @id @default(autoincrement())
+  iduser Int
   details Detail[]
-  user    User     @relation(fields: [iduser], references: [id])
+  user User @relation(fields: [iduser], references: [id])
 }

@@ -10,6 +10,7 @@ const {
 //Creacion de un nuevo producto:
 
 const createNewProduct = async (req, res) => {
+
   const { name, image, brand, category, description, price } = req.body;
 
   try {

@@ -53,6 +53,7 @@ router.delete("/product/:id", deleteAProduct);
 router.put("/product/:id", editAProduct);
 router.get("/product", getAProduct);
 router.get("/product/:id", getProductId);
+
 ///////////////////////////////////////// Categorys routes
 router.get("/category", getCategory);
 router.post("/category", categoryCreate);
