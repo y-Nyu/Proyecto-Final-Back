@@ -1,0 +1,9 @@
+// La información que envía MP. y esta información la envía por QUERY. Nos damos cuenta cuando miramos el init_point del postman: "https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=1169280609-5a97b3ae-c952-4afd-9e7b-e6bb71784e1e"
+
+//Si la respuesta de MP es success, se ejecutaria el siguiente controlador. Y el mismo lo que hace es redireccionar todo a la url de nuestro cliente.
+module.exports = (req, res) => {
+    console.log(req.query);
+    // res.redirect("url del front")
+    res.send("El pago ha sido realizado con éxito...")
+}
+
