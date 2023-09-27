@@ -11,48 +11,47 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  email String @unique
-  celular String
-  name String
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  celular  String
+  name     String
   password String
-  rol String @default("USER")
-  active Boolean @default(true)
-  sales Sale[]
+  rol      String  @default("USER")
+  active   Boolean @default(true)
+  sales    Sale[]
 }
 
 model Product {
-  id Int @id @default(autoincrement())
-  name String
-  image String
-  brand String
-  category Int
-  price Decimal
-  active Boolean @default(true)
-  categoryrel Category @relation(fields: [category], references: [id])
-  details Detail[]
+  id          Int      @id @default(autoincrement())
+  name        String
+  image       String
+  brand       String
+  category    String
+  description String
+  price       Decimal
+  active      Boolean  @default(true)
+  categoryrel Category @relation(fields: [category], references: [name])
+  details     Detail[]
 }
 
 model Detail {
-  id Int @id @default(autoincrement())
-  idsale Int
+  id        Int     @id @default(autoincrement())
+  idsale    Int
   idproduct Int
-  quantity Int
-  price Decimal
-  total Decimal
-  sale Sale @relation(fields: [idsale], references: [id])
-  product Product @relation(fields: [idproduct], references: [id])
-
+  quantity  Int
+  price     Decimal
+  total     Decimal
+  sale      Sale    @relation(fields: [idsale], references: [id])
+  product   Product @relation(fields: [idproduct], references: [id])
 }
 
 model Category {
-  id Int @id @default(autoincrement())
-  name String
-  active Boolean
+  id       Int       @default(autoincrement())
+  name     String    @id
+  active   Boolean
   products Product[]
 }
 
-model Sale {
   id Int @id @default(autoincrement())
   iduser Int
   details Detail[]

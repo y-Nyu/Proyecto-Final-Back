@@ -4,8 +4,12 @@ const prisma = require("../../db");
 const getUsers = async () => {
   const users = await prisma.user.findMany({
     include: {
-      sales: true,
-    }
+      sales: {
+        include: {
+          details: true,
+        },
+      },
+    },
   });
 
   return users.length === 0

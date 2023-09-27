@@ -19,6 +19,11 @@ const {
   getProductId,
 } = require("../handlers/Products/ProductHandler");
 
+const {
+  getCategory,
+  categoryCreate,
+} = require("../handlers/Category/categoryHandler");
+
 const router = Router();
 
 //////////////////////////////////////// User routes
@@ -44,6 +49,10 @@ router.delete("/product/:id", deleteAProduct);
 router.put("/product/:id", editAProduct);
 router.get("/product", getAProduct);
 router.get("/product/:id", getProductId);
+
+///////////////////////////////////////// Categorys routes
+router.get("/category", getCategory);
+router.post("/category", categoryCreate);
 /////////////////////////////////////////
 
 module.exports = router;

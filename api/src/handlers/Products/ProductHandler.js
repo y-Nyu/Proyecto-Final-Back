@@ -10,10 +10,18 @@ const {
 //Creacion de un nuevo producto:
 
 const createNewProduct = async (req, res) => {
-  const { name, image, brand, category, price } = req.body;
+
+  const { name, image, brand, category, description, price } = req.body;
 
   try {
-    const product = await createProduct(name, image, brand, category, price);
+    const product = await createProduct(
+      name,
+      image,
+      brand,
+      category,
+      description,
+      price
+    );
     res.status(201).send(`Nuevo producto creado: ${product.name}`);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -51,12 +59,12 @@ const editAProduct = async (req, res) => {
 
 const getAProduct = async (req, res) => {
   try {
-    const { name } = req.query;
-    if (!name) {
+    const { name, brand, price, category } = req.query;
+    if (!name && !brand && !price && !category) {
       const product = await getProduct();
       res.status(200).json(product);
     } else {
-      const product = await getProductByName(name);
+      const product = await getProductByName(name, brand, price, category);
       res.status(200).json(product);
     }
   } catch (error) {

@@ -1,12 +1,16 @@
 const prisma = require("../../db");
 
-async function getAllSales()
-{
-    const sales = await prisma.sale.findMany();
 
-    if(!sales) throw Error("No sales present in the database");
+async function getAllSales() {
+  const sales = await prisma.sale.findMany({
+    include: {
+      details: true,
+    },
+  });
 
-    return sales;
+  if (sales.length === 0) throw Error("No sales present in the database");
+
+  return sales;
 }
 
-module.exports = getAllSales
+module.exports = getAllSales;
