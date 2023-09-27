@@ -5,6 +5,8 @@ const {
   userGetById,
   usersCreate,
   userDelete,
+  userLogin,
+  userGoogleLogin,
 } = require("../handlers/Users/userHandler");
 const {
   createSale,
@@ -32,6 +34,8 @@ router.put("/users/:id", usersEdit);
 router.get("/users/:id", userGetById);
 router.post("/users", usersCreate);
 router.delete("/users/:id", userDelete);
+router.post("/login", userLogin);
+router.post("/login-google", userGoogleLogin);
 
 ///////////////////////////////////////// Sales routes
 router.get("/success", (req, res) =>
