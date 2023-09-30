@@ -1,5 +1,4 @@
 const prisma = require("../db");
-
 const { ADMIN_PAGES } = require("../utils/utils");
 
 async function authorization(req, res, next) {

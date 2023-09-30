@@ -1,6 +1,5 @@
 const prisma = require("../../db");
 
-
 async function createSale(token, idproduct, quantity) {
   const email = JSON.parse(
     Buffer.from(token?.split(".")[1], "base64").toString()

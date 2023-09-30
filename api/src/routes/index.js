@@ -25,7 +25,6 @@ const {
   getCategory,
   categoryCreate,
 } = require("../handlers/Category/categoryHandler");
-
 const createOrder = require("../mercado-pago/createOrder");
 const success = require("../mercado-pago/success");
 const webhook = require("../mercado-pago/webhook");
@@ -60,6 +59,11 @@ router.post("/login", userLogin);
 router.post("/login-google", userGoogleLogin);
 
 ///////////////////////////////////////// Sales routes
+router.get("/success", (req, res) =>
+  res.status(200).send("Payment was successful")
+);
+router.get("/pending", (req, res) => res.status(200).send("Pending..."));
+
 router.get("/sale", getAllSales);
 router.get("/sale/:id", getSaleById);
 router.post("/sale", createSale);
@@ -70,7 +74,6 @@ router.delete("/product/:id", deleteAProduct);
 router.put("/product/:id", editAProduct);
 router.get("/product", getAProduct);
 router.get("/product/:id", getProductId);
-
 ///////////////////////////////////////// Categorys routes
 router.get("/category", getCategory);
 router.post("/category", categoryCreate);
