@@ -19,7 +19,7 @@ const createOrder = async (req, res) => {
       brand,
       image,
       category,
-     description,
+      description,
       price,
       stock,
       active,
@@ -45,11 +45,11 @@ const createOrder = async (req, res) => {
       ],
       // Le damos el control a MP donde este, le da la vista y funcionalidad. A continuación están los posibles desenlaces.
       back_urls: {
-        success: "http://localhost:3001/success",
-        failure: "http://localhost:3001/failure",
-        pending: "http://localhost:3001/pending",
+        success: "https://pf-back-deploy.onrender.com/success",
+        failure: "https://pf-back-deploy.onrender.com/failure",
+        pending: "https://pf-back-deploy.onrender.com/pending",
       },
-      notification_url: "https://f068-167-249-52-106.ngrok-free.app/webhook",
+      notification_url: "https://pf-back-deploy.onrender.com/webhook",
     };
 
     const response = await mercadopago.preferences.create(preference);

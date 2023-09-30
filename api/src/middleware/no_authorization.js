@@ -1,3 +1,1 @@
-
 module.exports = ["/users", "/login"];
-

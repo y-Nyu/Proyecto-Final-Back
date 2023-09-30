@@ -2,9 +2,7 @@ const prisma = require("../../db");
 //Busca todos los productos.
 
 const getProduct = async () => {
-
   const product = await prisma.product.findMany({ include: { details: true } });
-
   return product.length === 0
     ? "No hay ninguna coincidencia en la base de datos"
     : product;
@@ -17,23 +15,21 @@ const getProductById = async (id) => {
     where: {
       id,
     },
-
     include: { details: true },
-
   });
   return product;
 };
 
 //Busca un producto por su nombre:
 
-
-const getProductByName = async (name, brand, price, category) => {
+const getProductByName = async (name, brand, price, category, sort) => {
   const product = await prisma.product.findMany({
     where: {
       name: name ? { contains: name } : undefined,
       brand: brand ? brand : undefined,
       price: price ? price : undefined,
       categoryrel: category ? { name: category } : undefined,
+      orderBy: [{ price: sort }],
     },
     include: { details: true },
   });

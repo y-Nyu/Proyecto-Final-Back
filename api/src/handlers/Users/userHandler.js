@@ -44,6 +44,7 @@ const userLogin = async (req, res) => {
 
     const user = await loginUser(email, password);
     const token = generateToken(user);
+    await sendWelcome(email, "./src/templates/Bienvenido.html");
 
     res.status(200).json({ message: `Usuario loggeado: ${user.name}`, token });
   } catch (error) {
@@ -60,6 +61,8 @@ const userGoogleLogin = async (req, res) => {
     // chequear la base de datos
     const user = await loginUserGoogle(google_token);
     const token = generateToken(user);
+
+    await sendLoginNotif(email, "./src/templates/Login.html");
 
     res.status(200).json({ message: `Usuario loggeado: ${user.name}`, token });
   } catch (error) {

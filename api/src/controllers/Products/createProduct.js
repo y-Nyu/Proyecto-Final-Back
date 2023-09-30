@@ -1,6 +1,5 @@
 const prisma = require("../../db");
 
-
 const createProduct = async (
   name,
   image,
