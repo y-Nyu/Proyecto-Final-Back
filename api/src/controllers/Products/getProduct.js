@@ -22,14 +22,13 @@ const getProductById = async (id) => {
 
 //Busca un producto por su nombre:
 
-const getProductByName = async (name, brand, price, category, sort) => {
+const getProductByName = async (name, brand, price, category) => {
   const product = await prisma.product.findMany({
     where: {
       name: name ? { contains: name } : undefined,
       brand: brand ? brand : undefined,
       price: price ? price : undefined,
       categoryrel: category ? { name: category } : undefined,
-      orderBy: [{ price: sort }],
     },
     include: { details: true },
   });
