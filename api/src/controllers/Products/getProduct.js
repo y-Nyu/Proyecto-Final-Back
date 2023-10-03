@@ -1,8 +1,25 @@
 const prisma = require("../../db");
 //Busca todos los productos.
 
-const getProduct = async () => {
-  const product = await prisma.product.findMany({ include: { details: true } });
+const getProduct = async (
+  brand,
+  maxPrice = Number.MAX_VALUE,
+  categoryName,
+  sort
+) => {
+  let product = await prisma.product.findMany({
+    where: {
+      brand,
+      price: {
+        lte: parseFloat(maxPrice),
+      },
+      category: {
+        contains: categoryName,
+      },
+    },
+    orderBy: [{ price: sort }],
+  });
+
   return product.length === 0
     ? "No hay ninguna coincidencia en la base de datos"
     : product;
@@ -11,34 +28,42 @@ const getProduct = async () => {
 //Busca un producto por su N° de Id:
 
 const getProductById = async (id) => {
-  const product = await prisma.product.findUnique({
+  let product = await prisma.product.findUnique({
     where: {
       id,
     },
-    include: { details: true },
   });
+
   return product;
 };
 
 //Busca un producto por su nombre:
 
-const getProductByName = async (name, brand, price, category) => {
-  const product = await prisma.product.findMany({
+const getProductByName = async (
+  name,
+  brand,
+  maxPrice = Number.MAX_VALUE,
+  categoryName,
+  sort
+) => {
+  let product = prisma.product.findMany({
     where: {
-      name: name ? { contains: name } : undefined,
-      brand: brand ? brand : undefined,
-      price: price ? price : undefined,
-      categoryrel: category ? { name: category } : undefined,
+      name: {
+        contains: name,
+      },
+      brand,
+      price: {
+        lte: parseFloat(maxPrice),
+      },
+      category: {
+        contains: categoryName,
+      },
     },
-    include: { details: true },
+
+    orderBy: [{ price: sort }],
   });
-  return product.length === 0
-    ? "No hay ninguna coincidencia en la base de datos"
-    : product;
+
+  return product;
 };
 
 module.exports = { getProduct, getProductById, getProductByName };
-
-// findMany() --> se utiliza para buscar y recuperar varios registros que cumplen con ciertos criterios de consulta de una tabla en la base de datos.
-
-// findUnique() --> se utiliza para buscar y recuperar un único registro de una tabla en la base de datos. A diferencia de findMany(), que recupera múltiples registros

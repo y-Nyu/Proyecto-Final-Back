@@ -1,6 +1,8 @@
 require("dotenv").config();
 const { JWT_SECRET } = process.env;
 
+const sendLoginNotif = require("../../controllers/Mails/sendLoginNotif");
+const sendWelcome = require("../../controllers/Mails/sendWelcome");
 const newUser = require("../../controllers/Users/createuser");
 const deleteUser = require("../../controllers/Users/deleteUser");
 const editUser = require("../../controllers/Users/editUser");
@@ -44,11 +46,11 @@ const userLogin = async (req, res) => {
 
     const user = await loginUser(email, password);
     const token = generateToken(user);
-    await sendWelcome(email, "./src/templates/Bienvenido.html");
+    // await sendLoginNotif(email, "../src/templates/Login.html");
 
     res.status(200).json({ message: `Usuario loggeado: ${user.name}`, token });
   } catch (error) {
-    res.status(401).json({ error: error.message });
+    res.status(401).json(error);
   }
 };
 
@@ -62,7 +64,7 @@ const userGoogleLogin = async (req, res) => {
     const user = await loginUserGoogle(google_token);
     const token = generateToken(user);
 
-    await sendLoginNotif(email, "./src/templates/Login.html");
+    // await sendLoginNotif(email, "./src/templates/Login.html");
 
     res.status(200).json({ message: `Usuario loggeado: ${user.name}`, token });
   } catch (error) {

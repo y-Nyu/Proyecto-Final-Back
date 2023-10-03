@@ -3,11 +3,11 @@
 const mercadopago = require("mercadopago");
 require("dotenv").config();
 
-const { ACCESS_TOKEN } = process.env;
+const { ACCESS_TOKEN2 } = process.env;
 
 //Configurar MP:
 mercadopago.configure({
-  access_token: ACCESS_TOKEN,
+  access_token: ACCESS_TOKEN2,
 });
 
 //Crear el controlador createOrger
