@@ -1,19 +1,17 @@
 const createTransporter = require("./utils/createTransporter");
-
+require("dotenv").config();
 
 const sendPaymentSuccess = async (HTMLpath) => {
-    const transporter = await createTransporter();
+  const transporter = await createTransporter();
 
-    const options = {
-        from: process.env.MAIL_ADDR,
-        to: userMail,
-        subject: "Pago realizado exitosamente",
-        html: fs.readFileSync(HTMLpath)
-    }
+  const options = {
+    from: process.env.MAIL_ADDR,
+    to: userMail,
+    subject: "Pago realizado exitosamente",
+    html: fs.readFileSync(HTMLpath),
+  };
 
-
-    transporter.sendMail(options)
-        
-}
+  transporter.sendMail(options);
+};
 
 module.exports = sendPaymentSuccess;

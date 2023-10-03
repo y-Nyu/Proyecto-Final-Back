@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { CLIENT_ID } = process.env;
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(CLIENT_ID);
