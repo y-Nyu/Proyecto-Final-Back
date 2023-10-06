@@ -7,7 +7,7 @@ const editUser = async (id, name, email, password, celular) => {
     },
   });
 
-  if (user.password === password) throw Error("Same password provided");
+  // if (user.password === password) throw Error("Same password provided");
 
   user = await prisma.user.update({
     where: {

@@ -23,6 +23,13 @@ const getUserById = async (id) => {
     where: {
       id,
     },
+    include: {
+      sales: {
+        include: {
+          details: true,
+        },
+      },
+    },
   });
   return user;
 };
