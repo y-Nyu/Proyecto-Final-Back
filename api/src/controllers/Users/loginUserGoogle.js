@@ -1,29 +1,25 @@
-require("dotenv").config();
-const { CLIENT_ID } = process.env;
-const { OAuth2Client } = require("google-auth-library");
-const client = new OAuth2Client(CLIENT_ID);
-const prisma = require("../../db");
+const { oauth2Client } = require("./utils/oauth_client");
+
+//
+// El token que está como param. es el que permite obtener la info y credenciales del
+// usuario.
+//
+// Así podemos actualizar su info en la base de datos
 
 const loginUserGoogle = async (token) => {
-  const ticket = await client.verifyIdToken({
-    idToken: token,
-    audience: CLIENT_ID,
+  const scopes = [
+    "https://www.googleapis.com/auth/userinfo.profile",
+    "https://www.googleapis.com/auth/userinfo.email",
+  ];
+
+  const url = oauth2Client.generateAuthUrl({
+    // 'online' (default) or 'offline' (gets refresh_token)
+    access_type: "online",
+    // If you only need one scope you can pass it as a string
+    scope: scopes,
   });
 
-  const { name, email } = ticket.getPayload();
-
-  const user = await prisma.user.update({
-    where: {
-      email,
-    },
-    data: {
-      name,
-    },
-  });
-
-  if (!user) throw Error("Such email is not registered...");
-
-  return user;
+  return url;
 };
 
 module.exports = loginUserGoogle;

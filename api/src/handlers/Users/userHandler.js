@@ -1,8 +1,6 @@
 require("dotenv").config();
 const { JWT_SECRET } = process.env;
 
-const sendLoginNotif = require("../../controllers/Mails/sendLoginNotif");
-const sendWelcome = require("../../controllers/Mails/sendWelcome");
 const newUser = require("../../controllers/Users/createuser");
 const deleteUser = require("../../controllers/Users/deleteUser");
 const editUser = require("../../controllers/Users/editUser");
@@ -15,6 +13,7 @@ const {
 } = require("../../controllers/Users/getUsers");
 
 const jwt = require("jsonwebtoken");
+const loginUserGoogleCred = require("../../controllers/Users/loginUserGoogleCred");
 
 //Generar el TOKEN
 function generateToken(user) {
@@ -33,7 +32,14 @@ const usersCreate = async (req, res) => {
     // Generar un token JWT para el usuario
     const token = generateToken(user);
 
-    res.status(201).json({ message: `Usuario creado: ${user.name}`, token });
+    res.status(201).json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      rol: user.rol,
+      celular: user.celular,
+      token,
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -46,37 +52,62 @@ const userLogin = async (req, res) => {
 
     const user = await loginUser(email, password);
     const token = generateToken(user);
-    // await sendLoginNotif(email, "../src/templates/Login.html");
 
-    res.status(200).json({ message: `Usuario loggeado: ${user.name}`, token });
+    res.status(200).json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      rol: user.rol,
+      celular: user.celular,
+      token,
+    });
   } catch (error) {
-    res.status(401).json(error);
+    res.status(401).json({ error: error.message });
   }
 };
 
 //Login del usuario(Google)
 const userGoogleLogin = async (req, res) => {
   try {
-    const { google_token } = req.body;
+    const auth_url = await loginUserGoogle();
 
-    // El ticket permite obtener el mail del usuario para
-    // chequear la base de datos
-    const user = await loginUserGoogle(google_token);
-    const token = generateToken(user);
-
-    // await sendLoginNotif(email, "./src/templates/Login.html");
-
-    res.status(200).json({ message: `Usuario loggeado: ${user.name}`, token });
+    res.status(200).json({ auth_url });
   } catch (error) {
     res.status(401).json({ error: error.message });
   }
 };
+
+const userGoogleLoginCredentials = async (req, res) => {
+  const { google_code } = req.body;
+
+  try {
+    const user = await loginUserGoogleCred(google_code);
+    const token = generateToken(user);
+    res.status(200).json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      rol: user.rol,
+      celular: user.celular,
+      token,
+    });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
+};
+
 //Borrar el usuario
 const userDelete = async (req, res) => {
   const { id } = req.params;
   try {
     const user = await deleteUser(+id);
-    res.status(201).send(`Usuario eliminado: ${user.name}`);
+    res.status(201).json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      rol: user.rol,
+      celular: user.celular,
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -88,7 +119,13 @@ const usersEdit = async (req, res) => {
   const { name, email, celular, password } = req.body;
   try {
     const user = await editUser(+id, name, email, celular, password);
-    res.status(201).json(`Usuario editado con exito ${user.name}`);
+    res.status(201).json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      rol: user.rol,
+      celular: user.celular,
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -129,10 +166,11 @@ const userGetById = async (req, res) => {
 
 module.exports = {
   usersCreate,
+  userLogin,
+  userGoogleLogin,
   userDelete,
   usersEdit,
   usersGet,
   userGetById,
-  userGoogleLogin,
-  userLogin,
+  userGoogleLoginCredentials,
 };

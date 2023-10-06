@@ -6,7 +6,8 @@ const createProduct = async (
   brand,
   category,
   description,
-  price
+  price,
+  stock
 ) => {
   const product = await prisma.product.create({
     data: {
@@ -16,6 +17,7 @@ const createProduct = async (
       category: category,
       description: description,
       price: price,
+      stock: stock,
     },
   });
   return product;
