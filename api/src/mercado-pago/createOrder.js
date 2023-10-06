@@ -13,42 +13,32 @@ mercadopago.configure({
 //Crear el controlador createOrger
 const createOrder = async (req, res) => {
   try {
-    const {
-      id,
-      name,
-      brand,
-      image,
-      category,
-      description,
-      price,
-      stock,
-      active,
-      quantity,
-    } = req.body;
+    const cart = req.body;
+
+    const items = await cart.map((item) => ({
+      id: item.id,
+      name: item.name,
+      brand: item.brand,
+      picture_url: item.image,
+      category: item.category,
+      stock: item.stock,
+      unit_price: Number(item.price),
+      quantity: item.quantity,
+      active: item.active,
+      currency_id: "ARS",
+    }));
 
     // Crear las preferencias (objetos que nos pide MP con propiedades que necesitan para poder generar la pasarela)
+
     let preference = {
-      // Lo hacemos en array de objetos ya que podemos comprar un producto o varios.
-      items: [
-        {
-          id: id,
-          name: name,
-          brand: brand,
-          picture_url: image,
-          category: category,
-          description: description,
-          unit_price: price,
-          quantity: quantity,
-          active: active,
-          currency_id: "ARS", // Si no estamos logueados en Arg. MP rastrea su moneda local.
-        },
-      ],
+      items,
       // Le damos el control a MP donde este, le da la vista y funcionalidad. A continuación están los posibles desenlaces.
       back_urls: {
         success: "https://pf-back-deploy.onrender.com/success",
         failure: "https://pf-back-deploy.onrender.com/failure",
         pending: "https://pf-back-deploy.onrender.com/pending",
       },
+      auto_return: "approved",
       notification_url: "https://pf-back-deploy.onrender.com/webhook",
     };
 

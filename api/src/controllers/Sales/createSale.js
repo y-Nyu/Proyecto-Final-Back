@@ -1,35 +1,25 @@
 const prisma = require("../../db");
 
-async function createSale(token, idproduct, quantity) {
-  const email = JSON.parse(
-    Buffer.from(token?.split(".")[1], "base64").toString()
-  );
-  let iduser = await prisma.user.findFirst({
+async function createSale(iduser, idproduct, quantity) {
+  const product = await prisma.product.findFirst({
     where: {
-      email: email.email,
-    },
-  });
-
-  iduser = iduser.id;
-
-  const product = await prisma.product.findUnique({
-    where: {
-      id: parseInt(idproduct),
+      id: idproduct,
     },
   });
 
   if (!product) throw Error("No such product in the database");
 
-  // This creates the detail and the sale it is related to at the same time
-  // It also connects this detail with the product
+  // if (product.stock - quantity < 0)
+  //   throw Error("Bought quantity greater than stock");
+
   const detail = await prisma.detail.create({
     data: {
-      quantity: parseInt(quantity),
-      price: parseFloat(product.price),
-      total: parseFloat(product.price) * parseInt(quantity),
+      quantity: quantity,
+      price: product.price,
+      total: product.price * quantity,
       sale: {
         create: {
-          iduser: parseInt(iduser),
+          iduser: iduser,
         },
       },
       product: {
@@ -37,6 +27,15 @@ async function createSale(token, idproduct, quantity) {
           id: product.id,
         },
       },
+    },
+  });
+
+  await prisma.product.update({
+    where: {
+      id: product.id,
+    },
+    data: {
+      stock: product.stock - quantity,
     },
   });
 
