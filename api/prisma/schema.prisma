@@ -15,8 +15,10 @@ model User {
   email    String  @unique
   celular  String
   name     String
-  password String
-  rol      String  @default("USER")
+  address  String?
+  password String?
+  google   Boolean
+  rol      Role    @default(USER)
   active   Boolean @default(true)
   sales    Sale[]
 }
@@ -25,10 +27,11 @@ model Product {
   id          Int      @id @default(autoincrement())
   name        String
   image       String
-  brand       String
+  brand       String?
   category    String
   description String
   price       Decimal
+  stock       Int      @default(1)
   active      Boolean  @default(true)
   categoryrel Category @relation(fields: [category], references: [name])
   details     Detail[]
@@ -57,4 +60,10 @@ model Sale {
   iduser  Int
   details Detail[]
   user    User     @relation(fields: [iduser], references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPERADMIN
 }
