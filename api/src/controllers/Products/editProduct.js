@@ -1,6 +1,15 @@
 const prisma = require("../../db");
 
-const editProduct = async (id, name, image, brand, category, price, stock) => {
+const editProduct = async (
+  id,
+  name,
+  image,
+  brand,
+  category,
+  price,
+  stock,
+  active
+) => {
   const product = await prisma.product.update({
     where: {
       id,
@@ -12,6 +21,7 @@ const editProduct = async (id, name, image, brand, category, price, stock) => {
       category,
       stock,
       price,
+      active,
     },
   });
   return product;

@@ -26,8 +26,8 @@ const createNewProduct = async (req, res) => {
       name,
       image,
       brand,
-      description,
       category,
+      description,
       price,
       stock
     );
@@ -55,7 +55,7 @@ const deleteAProduct = async (req, res) => {
 const editAProduct = async (req, res) => {
   const { id } = req.params;
   const { add } = req.query;
-  const { name, image, brand, category, price, stock } = req.body;
+  const { name, image, brand, category, price, stock, active } = req.body;
 
   try {
     if (!add) {
@@ -66,7 +66,8 @@ const editAProduct = async (req, res) => {
         brand,
         category,
         price,
-        stock
+        stock,
+        active
       );
       return res.status(201).json(product);
     }
