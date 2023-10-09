@@ -28,9 +28,9 @@ function generateToken(user) {
 
 //Creacion del usuario
 const usersCreate = async (req, res) => {
-  const { name, email, celular, password } = req.body;
+  const { name, email, celular, password, address } = req.body;
   try {
-    const user = await newUser(name, email, celular, password);
+    const user = await newUser(name, email, celular, password, address);
 
     // Generar un token JWT para el usuario
     const token = generateToken(user);
@@ -43,6 +43,7 @@ const usersCreate = async (req, res) => {
       name: user.name,
       rol: user.rol,
       celular: user.celular,
+      address: user.address,
       token,
     });
   } catch (error) {
@@ -64,6 +65,7 @@ const userLogin = async (req, res) => {
       name: user.name,
       rol: user.rol,
       celular: user.celular,
+      address: user.address,
       token,
     });
   } catch (error) {
@@ -86,9 +88,8 @@ const userGoogleLoginCredentials = async (req, res) => {
   const { google_code } = req.body;
 
   try {
+    const user = await loginUserGoogleCred(google_code);
     const token = generateToken(user);
-
-    await sendLoginNotif(user.email, "./src/templates/Login.html");
 
     res.status(200).json({
       id: user.id,
@@ -96,6 +97,7 @@ const userGoogleLoginCredentials = async (req, res) => {
       name: user.name,
       rol: user.rol,
       celular: user.celular,
+      address: user.address,
       token,
     });
   } catch (error) {
@@ -123,7 +125,7 @@ const userDelete = async (req, res) => {
 //Editar el usuario
 const usersEdit = async (req, res) => {
   const { id } = req.params;
-  const { name, email, rol, celular, password, active } = req.body;
+  const { name, email, rol, celular, password, address, active } = req.body;
   console.log(req.body);
   try {
     const user = await editUser(
@@ -133,6 +135,7 @@ const usersEdit = async (req, res) => {
       rol,
       celular,
       password,
+      address,
       active
     );
     res.status(201).json({
@@ -141,6 +144,7 @@ const usersEdit = async (req, res) => {
       name: user.name,
       rol: user.rol,
       celular: user.celular,
+      address: user.address,
       active: user.active,
     });
   } catch (error) {
