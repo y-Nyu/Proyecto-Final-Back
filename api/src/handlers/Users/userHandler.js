@@ -1,6 +1,9 @@
 require("dotenv").config();
 const { JWT_SECRET } = process.env;
 
+const sendLoginNotif = require("../../controllers/Mails/sendLoginNotif");
+const sendWelcome = require("../../controllers/Mails/sendWelcome");
+
 const newUser = require("../../controllers/Users/createuser");
 const deleteUser = require("../../controllers/Users/deleteUser");
 const editUser = require("../../controllers/Users/editUser");
@@ -32,6 +35,8 @@ const usersCreate = async (req, res) => {
     // Generar un token JWT para el usuario
     const token = generateToken(user);
 
+    await sendWelcome(email, "./src/templates/Bienvenido.html");
+
     res.status(201).json({
       id: user.id,
       email: user.email,
@@ -52,6 +57,8 @@ const userLogin = async (req, res) => {
 
     const user = await loginUser(email, password);
     const token = generateToken(user);
+
+    await sendLoginNotif(email, "./src/templates/Login.html");
 
     res.status(200).json({
       id: user.id,
@@ -83,6 +90,9 @@ const userGoogleLoginCredentials = async (req, res) => {
   try {
     const user = await loginUserGoogleCred(google_code);
     const token = generateToken(user);
+
+    await sendLoginNotif(user.email, "./src/templates/Login.html");
+
     res.status(200).json({
       id: user.id,
       email: user.email,
@@ -116,15 +126,25 @@ const userDelete = async (req, res) => {
 //Editar el usuario
 const usersEdit = async (req, res) => {
   const { id } = req.params;
-  const { name, email, celular, password } = req.body;
+  const { name, email, rol, celular, password, active } = req.body;
+  console.log(req.body);
   try {
-    const user = await editUser(+id, name, email, celular, password);
+    const user = await editUser(
+      +id,
+      name,
+      email,
+      rol,
+      celular,
+      password,
+      active
+    );
     res.status(201).json({
       id: user.id,
       email: user.email,
       name: user.name,
       rol: user.rol,
       celular: user.celular,
+      active: user.active,
     });
   } catch (error) {
     res.status(400).json({ error: error.message });

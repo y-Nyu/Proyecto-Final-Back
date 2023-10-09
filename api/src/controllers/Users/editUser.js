@@ -1,6 +1,6 @@
 const prisma = require("../../db");
 
-const editUser = async (id, name, email, password, celular) => {
+const editUser = async (id, name, email, rol, password, celular, active) => {
   let user = await prisma.user.findFirst({
     where: {
       id,
@@ -16,8 +16,10 @@ const editUser = async (id, name, email, password, celular) => {
     data: {
       name,
       email,
+      rol,
       password,
       celular,
+      active,
     },
   });
   return user;
