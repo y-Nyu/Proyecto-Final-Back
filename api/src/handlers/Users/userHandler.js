@@ -58,8 +58,6 @@ const userLogin = async (req, res) => {
     const user = await loginUser(email, password);
     const token = generateToken(user);
 
-    await sendLoginNotif(email, "./src/templates/Login.html");
-
     res.status(200).json({
       id: user.id,
       email: user.email,
@@ -88,7 +86,6 @@ const userGoogleLoginCredentials = async (req, res) => {
   const { google_code } = req.body;
 
   try {
-    const user = await loginUserGoogleCred(google_code);
     const token = generateToken(user);
 
     await sendLoginNotif(user.email, "./src/templates/Login.html");

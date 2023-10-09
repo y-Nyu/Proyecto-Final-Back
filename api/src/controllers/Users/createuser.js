@@ -11,6 +11,7 @@ const newUser = async (name, email, celular, password) => {
       email,
       celular,
       password: hashedPassword,
+      google: false,
     },
   });
 

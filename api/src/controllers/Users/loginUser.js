@@ -9,6 +9,7 @@ const loginUser = async (email, password) => {
   });
 
   if (!user) throw Error("Invalid email provided");
+  if (user.google) throw Error("This user was registered with google");
 
   const isValid = bcrypt.compareSync(password, user.password);
 
