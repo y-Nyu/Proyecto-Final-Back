@@ -28,6 +28,7 @@ const loginUserGoogleCred = async (code) => {
       email,
       name,
       google: true,
+      celular: "0000000000",
     },
   });
 

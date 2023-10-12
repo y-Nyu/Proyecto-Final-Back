@@ -2,6 +2,7 @@ const createProduct = require("../../controllers/Products/createProduct");
 const deleteProduct = require("../../controllers/Products/deleteProduct");
 const editProduct = require("../../controllers/Products/editProduct");
 const addStock = require("../../controllers/Products/addStock");
+const addRating = require("../../controllers/Products/addRating");
 const {
   getProduct,
   getProductById,
@@ -126,10 +127,26 @@ const getProductId = async (req, res) => {
   }
 };
 
+// Agregar rating al producto
+
+const addProductRating = async (req, res) => {
+  const { id } = req.params;
+  const { userId, Rating } = req.body;
+
+  try {
+    const product = await addRating(+id, userId, Rating);
+
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createNewProduct,
   deleteAProduct,
   editAProduct,
   getAProduct,
   getProductId,
+  addProductRating,
 };

@@ -9,6 +9,7 @@ const deleteUser = require("../../controllers/Users/deleteUser");
 const editUser = require("../../controllers/Users/editUser");
 const loginUser = require("../../controllers/Users/loginUser");
 const loginUserGoogle = require("../../controllers/Users/loginUserGoogle");
+const changePass = require("../../controllers/Users/changuePass");
 const {
   getUsers,
   getUserById,
@@ -28,9 +29,9 @@ function generateToken(user) {
 
 //Creacion del usuario
 const usersCreate = async (req, res) => {
-  const { name, email, celular, password, address } = req.body;
+  const { name, email, celular, password, address, rol } = req.body;
   try {
-    const user = await newUser(name, email, celular, password, address);
+    const user = await newUser(name, email, celular, password, address, rol);
 
     // Generar un token JWT para el usuario
     const token = generateToken(user);
@@ -86,7 +87,7 @@ const userGoogleLogin = async (req, res) => {
 
 const userGoogleLoginCredentials = async (req, res) => {
   const { google_code } = req.body;
-
+  console.log(google_code);
   try {
     const user = await loginUserGoogleCred(google_code);
     const token = generateToken(user);
@@ -101,6 +102,7 @@ const userGoogleLoginCredentials = async (req, res) => {
       token,
     });
   } catch (error) {
+    console.log(error, "Error");
     res.status(401).json({ error: error.message });
   }
 };
@@ -185,6 +187,24 @@ const userGetById = async (req, res) => {
   }
 };
 
+// Cambiar password del usuario
+const changePassword = async (req, res) => {
+  const { id, password } = req.body;
+
+  try {
+    const user = await changePass(id, password);
+    res.status(200).json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      rol: user.rol,
+      celular: user.celular,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   usersCreate,
   userLogin,
@@ -194,4 +214,5 @@ module.exports = {
   usersGet,
   userGetById,
   userGoogleLoginCredentials,
+  changePassword,
 };

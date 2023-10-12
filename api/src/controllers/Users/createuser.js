@@ -1,7 +1,7 @@
 const prisma = require("../../db");
 const bcrypt = require("bcrypt");
 
-const newUser = async (name, email, celular, password, address) => {
+const newUser = async (name, email, celular, password, address, rol) => {
   // Generar un hash de la contraseña
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -13,6 +13,7 @@ const newUser = async (name, email, celular, password, address) => {
       password: hashedPassword,
       address,
       google: false,
+      rol,
     },
   });
 

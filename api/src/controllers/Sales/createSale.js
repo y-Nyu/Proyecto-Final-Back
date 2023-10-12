@@ -14,6 +14,8 @@ async function createSale(iduser, idproduct, quantity) {
 
   const detail = await prisma.detail.create({
     data: {
+      image: product.image,
+      name: product.name,
       quantity: quantity,
       price: product.price,
       total: product.price * quantity,

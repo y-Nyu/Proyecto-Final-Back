@@ -13,6 +13,10 @@ const getProduct = async (brand, maxPrice, categoryName, sort) => {
       },
     },
     orderBy: [{ price: sort }],
+    include: {
+      comments: true,
+      Rating: true,
+    },
   });
 
   return product.length === 0
@@ -26,6 +30,10 @@ const getProductById = async (id) => {
   let product = await prisma.product.findUnique({
     where: {
       id,
+    },
+    include: {
+      comments: true,
+      Rating: true,
     },
   });
 
