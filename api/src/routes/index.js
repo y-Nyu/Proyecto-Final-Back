@@ -1,5 +1,9 @@
 const { Router } = require("express");
 const {
+  createCommentHandler,
+  deleteCommentHandler,
+} = require("../handlers/Comments/commentsHandlers");
+const {
   usersGet,
   usersEdit,
   userGetById,
@@ -8,6 +12,7 @@ const {
   userLogin,
   userGoogleLogin,
   userGoogleLoginCredentials,
+  changePassword,
 } = require("../handlers/Users/userHandler");
 const {
   createSale,
@@ -20,6 +25,7 @@ const {
   editAProduct,
   getAProduct,
   getProductId,
+  addProductRating,
 } = require("../handlers/Products/ProductHandler");
 
 const {
@@ -59,6 +65,7 @@ router.delete("/users/:id", userDelete);
 router.post("/login", userLogin);
 router.post("/login-google-init", userGoogleLogin);
 router.post("/login-google", userGoogleLoginCredentials);
+router.put("/change-password", changePassword);
 
 ///////////////////////////////////////// Sales routes
 router.get("/success", (req, res) =>
@@ -79,6 +86,11 @@ router.get("/product/:id", getProductId);
 ///////////////////////////////////////// Categorys routes
 router.get("/category", getCategory);
 router.post("/category", categoryCreate);
-/////////////////////////////////////////
+
+/////////////////////////////////////////Comments routes
+router.post("/comments", createCommentHandler);
+router.delete("/comments", deleteCommentHandler);
+
+router.post("/rate/:id", addProductRating);
 
 module.exports = router;

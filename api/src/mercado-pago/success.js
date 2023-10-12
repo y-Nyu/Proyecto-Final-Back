@@ -8,6 +8,6 @@ const succes = async (req, res) => {
     console.error("ERROR SENDING EMAIL || " + err.message)
   );
 
-  res.redirect("https://pf-deploy-gamma.vercel.app");
+  res.redirect("https://pf-eight-kappa.vercel.app/#/success");
 };
 module.exports = succes;
