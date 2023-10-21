@@ -47,6 +47,7 @@ const getProductByName = async (name, brand, maxPrice, categoryName, sort) => {
     where: {
       name: {
         contains: name,
+        mode: "insensitive",
       },
       brand,
       price: {

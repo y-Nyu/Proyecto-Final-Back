@@ -1,45 +1,74 @@
 const prisma = require("../../db");
+const sendPaymentSuccess = require("../Mails/sendPaymentSuccess");
 
-async function createSale(iduser, idproduct, quantity) {
-  const product = await prisma.product.findFirst({
+// products es un array de productos
+async function createSale(iduser, productArr) {
+  const idArr = productArr.map((prod) => {
+    return { id: prod.id };
+  });
+
+  const products = await prisma.product.findMany({
     where: {
-      id: idproduct,
+      OR: idArr,
     },
   });
 
-  if (!product) throw Error("No such product in the database");
+  const user = await prisma.user.findFirst({
+    where: {
+      id: iduser,
+    },
+  });
 
-  // if (product.stock - quantity < 0)
-  //   throw Error("Bought quantity greater than stock");
+  let total = 0;
 
+  for (let i = 0; i < products.length; i++) {
+    total += productArr[i].quantity * parseFloat(products[i].price);
+  }
+
+  // EL MODELO DE DETAIL AHORA TIENE UN ARRAY
+  // DE OBJETOS ( JSON[] ) LLAMADO products
+  // ASÍ QUE SE ELIMINA LA RELACIÓN ENTRE DETAIL Y PRODUCT
   const detail = await prisma.detail.create({
     data: {
-      image: product.image,
-      name: product.name,
-      quantity: quantity,
-      price: product.price,
-      total: product.price * quantity,
+      total: total,
       sale: {
         create: {
           iduser: iduser,
         },
       },
-      product: {
-        connect: {
-          id: product.id,
-        },
-      },
+      products: products.map((prod, index) => {
+        // ESTE QUILOMBO DE ACÁ ES PARA NO DEVOLVER EL STOCK
+        // PORQUE SEGURO ROMPEN LAS BOLAS CON ESO.
+        // NO LE HAGO UNA FUNCIÓN APARTE PORQUE CREO
+        // QUE LO VAMOS A HACER UNA SOLA VEZ Y YA
+        return {
+          id: prod.id,
+          name: prod.name,
+          brand: prod.brand,
+          category: prod.category,
+          image: prod.image,
+          price: prod.price,
+          description: prod.description,
+          quantity: productArr[index].quantity,
+        };
+      }),
     },
   });
 
-  await prisma.product.update({
-    where: {
-      id: product.id,
-    },
-    data: {
-      stock: product.stock - quantity,
-    },
-  });
+  for (let i = 0; i < products.length; i++) {
+    prisma.product.update({
+      where: {
+        id: products[i].id,
+      },
+      data: {
+        stock: products[i].stock - productArr[i].quantity,
+      },
+    });
+  }
+
+  if (user.email) {
+    sendPaymentSuccess(user.email);
+  }
 
   return detail;
 }

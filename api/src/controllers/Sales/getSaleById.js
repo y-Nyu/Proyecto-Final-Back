@@ -6,7 +6,11 @@ async function getSaleById(id) {
       id: parseInt(id),
     },
     include: {
-      details: true,
+      details: {
+        include: {
+          products: true,
+        },
+      },
     },
   });
 
